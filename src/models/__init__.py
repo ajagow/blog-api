@@ -7,5 +7,5 @@ from flask_bcrypt import Bcrypt
 db = SQLAlchemy()
 bcrypt = Bcrypt()
 
-from .BlogpostModel import BlogpostModel, BlogpostSchema
+from .PostModel import PostModel, PostSchema
 from .UserModel import UserModel, UserSchema
