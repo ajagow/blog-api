@@ -18,7 +18,7 @@ class Auth():
     """
     try:
       payload = {
-        'exp': datetime.datetime.utcnow() + datetime.timedelta(days=1),
+        'exp': datetime.datetime.utcnow() + datetime.timedelta(days=60),
         'iat': datetime.datetime.utcnow(),
         'sub': user_id
       }

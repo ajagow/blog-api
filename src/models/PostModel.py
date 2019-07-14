@@ -60,16 +60,17 @@ class PostModel(db.Model):
 
   @staticmethod
   def get_market_active_posts_for_user(currentUser, numPosts, lookbackHours):
-    one_day = datetime.timedelta(hours=lookbackHours)
-    one_day_ago = now() - one_day
-    return PostModel.query.filter(and_(PostModel.created_at > one_day_ago, PostModel.owner_id != currentUser))\
-      .filter(not_(exists().where(and_(LikesModel.post_id == PostModel.id, LikesModel.user_id == currentUser)))).limit(numPosts)
+    look_back_time = datetime.timedelta(hours=lookbackHours)
+    look_back = now() - look_back_time
+    return PostModel.query.filter(and_(PostModel.created_at > look_back, PostModel.owner_id != currentUser))\
+    .filter(not_(exists().where(and_(LikesModel.post_id == PostModel.id, LikesModel.user_id == currentUser)))).limit(
+    numPosts)
 
   @staticmethod
   def get_investment_posts(currentUser, numPosts, lookbackHours):
-    one_day = datetime.timedelta(hours=lookbackHours)
-    one_day_ago = now() - one_day
-    return PostModel.query.filter(and_(PostModel.created_at > one_day_ago, PostModel.owner_id != currentUser))\
+    look_back_time = datetime.timedelta(hours=lookbackHours)
+    look_back = now() - look_back_time
+    return PostModel.query.filter(and_(PostModel.created_at > look_back, PostModel.owner_id != currentUser))\
       .filter(not_(exists().where(and_(LikesModel.post_id == PostModel.id, LikesModel.user_id == currentUser)))).limit(numPosts)
 
   @staticmethod
