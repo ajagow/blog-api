@@ -17,10 +17,10 @@ def get_zero_or_value(value):
 
 class PostModel(db.Model):
   """
-  Blogpost Model
+  Thought Model
   """
 
-  __tablename__ = 'blogposts'
+  __tablename__ = 'thoughts'
 
   id = db.Column(db.Integer, primary_key=True)
   contents = db.Column(db.Text, nullable=False)
@@ -55,7 +55,7 @@ class PostModel(db.Model):
     db.session.commit()
   
   @staticmethod
-  def get_all_blogposts():
+  def get_all_thoughts():
     return PostModel.query.all()
 
   @staticmethod
@@ -74,7 +74,7 @@ class PostModel(db.Model):
       .filter(not_(exists().where(and_(LikesModel.post_id == PostModel.id, LikesModel.user_id == currentUser)))).limit(numPosts)
 
   @staticmethod
-  def get_one_blogpost(id):
+  def get_one_thought(id):
     return PostModel.query.get(id)
 
   @staticmethod

@@ -14,7 +14,7 @@ class InvestmentsModel(db.Model):
 
   id = db.Column(db.Integer, primary_key=True)
   initial_investment = db.Column(db.Integer, nullable=False)
-  post_id = db.Column(db.Integer, db.ForeignKey('blogposts.id'), nullable=False)
+  post_id = db.Column(db.Integer, db.ForeignKey('thoughts.id'), nullable=False)
   investor_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
 
   def __init__(self, data):

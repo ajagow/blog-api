@@ -1,4 +1,4 @@
-# src/models/Blogpost.py
+# src/models/LikesModel.py
 from . import db
 import datetime
 from marshmallow import fields, Schema
@@ -13,7 +13,7 @@ class LikesModel(db.Model):
 
   id = db.Column(db.Integer, primary_key=True)
   user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
-  post_id = db.Column(db.Integer, db.ForeignKey('blogposts.id'), nullable=False)
+  post_id = db.Column(db.Integer, db.ForeignKey('thoughts.id'), nullable=False)
   is_like = db.Column(db.Boolean, nullable=False)
 
   def __init__(self, data):

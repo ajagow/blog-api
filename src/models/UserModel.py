@@ -19,7 +19,7 @@ class UserModel(db.Model):
   password = db.Column(db.String(128), nullable=False)
   created_at = db.Column(db.DateTime)
   modified_at = db.Column(db.DateTime)
-  blogposts = db.relationship('PostModel', backref='users', lazy=True)
+  thoughts = db.relationship('PostModel', backref='users', lazy=True)
   investments = db.relationship('InvestmentsModel', backref='users', lazy=True)
 
   # class constructor
@@ -77,5 +77,5 @@ class UserSchema(Schema):
   password = fields.Str(required=True, load_only=True)
   created_at = fields.DateTime(dump_only=True)
   modified_at = fields.DateTime(dump_only=True)
-  blogposts = fields.Nested(PostSchema, many=True)
+  thoughts = fields.Nested(PostSchema, many=True)
   investments = fields.Nested(InvestorsSchema, many=True)
