@@ -7,7 +7,7 @@ from .models import db, bcrypt
 
 # import user_api blueprint
 from .views.UserView import user_api as user_blueprint
-from .views.PostView import blogpost_api as blogpost_blueprint
+from .views.PostView import thought_api as thought_blueprint
 from .views.InvestmentsView import investments_api as investments_blueprint
 from .views.LIkesView import likes_api as likes_blueprint
 
@@ -29,7 +29,7 @@ def create_app(env_name):
   db.init_app(app)
 
   app.register_blueprint(user_blueprint, url_prefix='/api/v1/users') # add this line
-  app.register_blueprint(blogpost_blueprint, url_prefix='/api/v1/posts')
+  app.register_blueprint(thought_blueprint, url_prefix='/api/v1/thoughts')
   app.register_blueprint(investments_blueprint, url_prefix='/api/v1/investments')
   app.register_blueprint(likes_blueprint, url_prefix='/api/v1/likes')
 

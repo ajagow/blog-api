@@ -9,7 +9,7 @@ def if_none_then_zero(val):
         return val
 
 def get_total_value(post_id):
-    post = PostModel.get_one_blogpost(post_id)
+    post = PostModel.get_one_thought(post_id)
     likes = LikesModel.get_likes_for_post(post_id)
     dislikes = LikesModel.get_dislikes_for_post(post_id)
     investment = InvestmentsModel.get_investment_total_for_post(post_id)

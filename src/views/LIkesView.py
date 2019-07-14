@@ -31,13 +31,13 @@ def get_all():
   data = likes_schema.dump(posts, many=True).data
   return custom_response(data, 200)
 
-@likes_api.route('likesForPost/<int:blogpost_id>', methods=['GET'])
-def get_likes_for_post(blogpost_id):
+@likes_api.route('likesForPost/<int:thought_id>', methods=['GET'])
+def get_likes_for_post(thought_id):
     """
     Get likes for a post
     """
     req_data = request.get_json()
-    post = LikesModel.get_likes_for_post(blogpost_id)
+    post = LikesModel.get_likes_for_post(thought_id)
     if not post:
         return custom_response({'error': 'post not found'}, 404)
 
@@ -45,14 +45,14 @@ def get_likes_for_post(blogpost_id):
 
     return custom_response(data, 200)
 
-@likes_api.route('dislikesForPost/<int:blogpost_id>', methods=['GET'])
+@likes_api.route('dislikesForPost/<int:thought_id>', methods=['GET'])
 @Auth.auth_required
-def get_dislikes_for_post(blogpost_id):
+def get_dislikes_for_post(thought_id):
     """
     Get likes for a post
     """
     req_data = request.get_json()
-    post = LikesModel.get_dislikes_for_post(blogpost_id)
+    post = LikesModel.get_dislikes_for_post(thought_id)
     if not post:
         return custom_response({'error': 'post not found'}, 404)
 
@@ -61,14 +61,14 @@ def get_dislikes_for_post(blogpost_id):
     return custom_response(data, 200)
 
 
-@likes_api.route('/<int:blogpost_id>', methods=['PUT'])
+@likes_api.route('/<int:thought_id>', methods=['PUT'])
 @Auth.auth_required
-def update(blogpost_id):
+def update(thought_id):
     """
-    Update A Blogpost
+    Update A thought
     """
     req_data = request.get_json()
-    post = LikesModel.get_dislikes_for_post(blogpost_id)
+    post = LikesModel.get_dislikes_for_post(thought_id)
     if not post:
         return custom_response({'error': 'post not found'}, 404)
     data = likes_schema.dump(post).data

@@ -44,14 +44,14 @@ def get_investment_total_for_post(post_id):
   return custom_response(data, 200)
 
 
-@investments_api.route('post/<int:blogpost_id>', methods=['GET'])
+@investments_api.route('post/<int:thought_id>', methods=['GET'])
 @Auth.auth_required
-def get_investors_for_post(blogpost_id):
+def get_investors_for_post(thought_id):
     """
     Get investors for a post
     delete me
     """
-    post = InvestmentsModel.get_all_investors_for_post(blogpost_id)
+    post = InvestmentsModel.get_all_investors_for_post(thought_id)
     if not post:
         return custom_response({'error': 'post not found'}, 404)
 

@@ -6,11 +6,11 @@ from ..shared.Authentication import Auth
 from ..models.PostModel import PostModel, PostSchema
 from ..models.InvestmentsModel import InvestmentsModel
 
-blogpost_api = Blueprint('blogpost_api', __name__)
-blogpost_schema = PostSchema()
+thought_api = Blueprint('thought_api', __name__)
+thought_schema = PostSchema()
 
 
-@blogpost_api.route('/', methods=['POST'])
+@thought_api.route('/', methods=['POST'])
 @Auth.auth_required
 def create():
   """
@@ -18,44 +18,44 @@ def create():
   """
   req_data = request.get_json()
   req_data['owner_id'] = g.user.get('id')
-  data, error = blogpost_schema.load(req_data)
+  data, error = thought_schema.load(req_data)
   if error:
     return custom_response(error, 400)
   post = PostModel(data)
   post.save()
-  data = blogpost_schema.dump(post).data
+  data = thought_schema.dump(post).data
   return custom_response(data, 201)
 
-@blogpost_api.route('/', methods=['GET'])
+@thought_api.route('/', methods=['GET'])
 def get_all():
   """
-  Get All Blogposts
+  Get All thoughts
   """
-  posts = PostModel.get_all_blogposts()
-  data = blogpost_schema.dump(posts, many=True).data
+  posts = PostModel.get_all_thoughts()
+  data = thought_schema.dump(posts, many=True).data
   return custom_response(data, 200)
 
-@blogpost_api.route('/marketFeedPost/<int:numPosts>/<int:lookbackHours>', methods=['GET'])
+@thought_api.route('/marketFeedPost/<int:numPosts>/<int:lookbackHours>', methods=['GET'])
 @Auth.auth_required
 def get_all_market_active(numPosts, lookbackHours):
   """
-  Get All Blogposts
+  Get All thoughts
   """
   currentUser = g.user.get('id')
   posts = PostModel.get_market_active_posts_for_user(currentUser, numPosts, lookbackHours)
-  data = blogpost_schema.dump(posts, many=True).data
+  data = thought_schema.dump(posts, many=True).data
   return custom_response(data, 200)
 
-@blogpost_api.route('/value/<int:post_id>', methods=['GET'])
+@thought_api.route('/value/<int:post_id>', methods=['GET'])
 def get_value_of_post(post_id):
   """
-  Get All Blogposts
+  Get All thoughts
   """
   posts = PostModel.get_value_of_post(post_id)
   data = posts
   return custom_response(data, 200)
 
-@blogpost_api.route('/investments/<int:numPosts>/<int:lookbackHours>', methods=['GET'])
+@thought_api.route('/investments/<int:numPosts>/<int:lookbackHours>', methods=['GET'])
 @Auth.auth_required
 def get_all_investment_posts(numPosts, lookbackHours):
   """
@@ -64,7 +64,7 @@ def get_all_investment_posts(numPosts, lookbackHours):
   currentUser = g.user.get('id')
   posts = PostModel.get_investment_posts(currentUser, numPosts, lookbackHours)
 
-  data = blogpost_schema.dump(posts, many=True).data
+  data = thought_schema.dump(posts, many=True).data
 
   for d in data:
       post_id = d.get('id')
@@ -75,28 +75,28 @@ def get_all_investment_posts(numPosts, lookbackHours):
   return custom_response(data, 200)
 
 
-@blogpost_api.route('/<int:blogpost_id>', methods=['PUT'])
+@thought_api.route('/<int:thought_id>', methods=['PUT'])
 @Auth.auth_required
-def update(blogpost_id):
+def update(thought_id):
     """
-    Update A Blogpost
+    Update A thought
     """
     req_data = request.get_json()
-    post = PostModel.get_one_blogpost(blogpost_id)
+    post = PostModel.get_one_thought(thought_id)
     if not post:
         return custom_response({'error': 'post not found'}, 404)
-    data = blogpost_schema.dump(post).data
+    data = thought_schema.dump(post).data
 
     # might disable this feature
     if data.get('owner_id') != g.user.get('id'):
         return custom_response({'error': 'permission denied'}, 400)
 
-    data, error = blogpost_schema.load(req_data, partial=True)
+    data, error = thought_schema.load(req_data, partial=True)
     if error:
         return custom_response(error, 400)
     post.update(data)
 
-    data = blogpost_schema.dump(post).data
+    data = thought_schema.dump(post).data
     return custom_response(data, 200)
 
 def custom_response(res, status_code):
