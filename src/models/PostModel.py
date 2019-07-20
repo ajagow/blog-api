@@ -59,10 +59,14 @@ class PostModel(db.Model):
     return PostModel.query.all()
 
   @staticmethod
-  def get_market_active_posts_for_user(currentUser, numPosts, lookbackHours):
-    look_back_time = datetime.timedelta(hours=lookbackHours)
-    look_back = now() - look_back_time
-    return PostModel.query.filter(and_(PostModel.created_at > look_back, PostModel.owner_id != currentUser))\
+  def get_market_active_posts_for_user(currentUser, numPosts, lookbackHours, lookbackHoursEnd):
+    look_back_time_start = datetime.timedelta(hours=lookbackHours)
+    look_back_start = now() - look_back_time_start
+
+    look_back_time_end = datetime.timedelta(hours=lookbackHoursEnd)
+    look_back_end = now() - look_back_time_end
+
+    return PostModel.query.filter(and_(PostModel.created_at < look_back_start, PostModel.created_at > look_back_end, PostModel.owner_id != currentUser))\
     .filter(not_(exists().where(and_(LikesModel.post_id == PostModel.id, LikesModel.user_id == currentUser)))).limit(
     numPosts)
 
