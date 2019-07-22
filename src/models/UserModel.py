@@ -2,8 +2,9 @@
 from marshmallow import fields, Schema
 import datetime
 from . import db, bcrypt
-from .PostModel import PostSchema
-from .InvestmentsModel import InvestorsSchema
+from .PostModel import PostSchema, PostModel
+from .InvestmentsModel import InvestorsSchema, InvestmentsModel
+from ..shared.Util import get_earnings
 
 class UserModel(db.Model):
   """
@@ -60,6 +61,28 @@ class UserModel(db.Model):
   @staticmethod
   def get_user_by_email(value):
     return UserModel.query.filter_by(email=value).first()
+
+  @staticmethod
+  def get_user_networth(id):
+    user = UserModel.query.get(id)
+
+    user_ideas = user.thoughts
+    user_investments = user.investments
+
+    worth = 0
+    for thought in user_ideas:
+      initial = thought.initial_worth
+      earnings = get_earnings(thought.id, initial)
+      worth += earnings
+
+    for investment in user_investments:
+      post_id = investment.post_id
+      initial_investment = investment.initial_investment
+
+      investment_earnings = get_earnings(post_id, initial_investment)
+      worth += investment_earnings
+
+    return worth
 
   def __generate_hash(self, password):
     return bcrypt.generate_password_hash(password, rounds=10).decode("utf-8")

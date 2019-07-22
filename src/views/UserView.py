@@ -17,13 +17,13 @@ def create():
 
   if error:
     return custom_response(error, 400)
-  
+
   # check if user already exist in the db
   user_in_db = UserModel.get_user_by_email(data.get('email'))
   if user_in_db:
     message = {'error': 'User already exist, please supply another email address'}
     return custom_response(message, 400)
-  
+
   user = UserModel(data)
   user.save()
   ser_data = user_schema.dump(user).data
@@ -49,7 +49,7 @@ def get_a_user(user_id):
   user = UserModel.get_one_user(user_id)
   if not user:
     return custom_response({'error': 'user not found'}, 404)
-  
+
   ser_user = user_schema.dump(user).data
   return custom_response(ser_user, 200)
 
@@ -87,7 +87,25 @@ def get_me():
   """
   user = UserModel.get_one_user(g.user.get('id'))
   ser_user = user_schema.dump(user).data
+
+  net_worth = UserModel.get_user_networth(g.user.get('id'))
+
+  ser_user.update({"net_worth": net_worth})
   return custom_response(ser_user, 200)
+
+@user_api.route('/worth', methods=['GET'])
+@Auth.auth_required
+def get_networth():
+  """
+  Get me
+  """
+  user = UserModel.get_user_networth(g.user.get('id'))
+
+  d = {}
+
+  d.update({"net_worth": user})
+
+  return custom_response(d, 200)
 
 
 @user_api.route('/login', methods=['POST'])
@@ -111,7 +129,7 @@ def login():
   token = Auth.generate_token(ser_data.get('id'))
   return custom_response({'jwt_token': token}, 200)
 
-  
+
 
 def custom_response(res, status_code):
   """
