@@ -6,7 +6,7 @@ from .InvestmentsModel import InvestmentsModel
 from . import db
 import datetime
 from marshmallow import fields, Schema
-from sqlalchemy import and_, exists, not_, desc
+from sqlalchemy import and_, exists, not_, asc
 
 
 def get_zero_or_value(value):
@@ -67,7 +67,7 @@ class PostModel(db.Model):
     look_back_end = now() - look_back_time_end
 
     return PostModel.query.filter(and_(PostModel.created_at < look_back_start, PostModel.created_at > look_back_end, PostModel.owner_id != currentUser))\
-    .filter(not_(exists().where(and_(LikesModel.post_id == PostModel.id, LikesModel.user_id == currentUser)))).order_by(desc(PostModel.created_at)).limit(
+    .filter(not_(exists().where(and_(LikesModel.post_id == PostModel.id, LikesModel.user_id == currentUser)))).order_by(asc(PostModel.created_at)).limit(
     numPosts)
 
   @staticmethod
@@ -75,7 +75,7 @@ class PostModel(db.Model):
     look_back_time = datetime.timedelta(hours=lookbackHours)
     look_back = now() - look_back_time
     return PostModel.query.filter(and_(PostModel.created_at > look_back, PostModel.owner_id != currentUser))\
-      .filter(not_(exists().where(and_(LikesModel.post_id == PostModel.id, LikesModel.user_id == currentUser)))).order_by(desc(PostModel.created_at)).limit(numPosts)
+      .filter(not_(exists().where(and_(LikesModel.post_id == PostModel.id, LikesModel.user_id == currentUser)))).order_by(asc(PostModel.created_at)).limit(numPosts)
 
   @staticmethod
   def get_one_thought(id):
