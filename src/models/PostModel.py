@@ -6,7 +6,7 @@ from .InvestmentsModel import InvestmentsModel
 from . import db
 import datetime
 from marshmallow import fields, Schema
-from sqlalchemy import and_, exists, not_, asc
+from sqlalchemy import and_, exists, not_, asc, desc
 
 
 def get_zero_or_value(value):
@@ -56,7 +56,7 @@ class PostModel(db.Model):
 
   @staticmethod
   def get_thought_user(user_id):
-    return PostModel.query.filter(PostModel.owner_id == user_id)
+    return PostModel.query.filter(PostModel.owner_id == user_id).order_by(desc(PostModel.created_at))
   
   @staticmethod
   def get_all_thoughts():
