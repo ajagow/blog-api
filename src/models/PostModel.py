@@ -53,6 +53,10 @@ class PostModel(db.Model):
   def delete(self):
     db.session.delete(self)
     db.session.commit()
+
+    @staticmethod
+    def get_thought_user(user_id):
+      return PostModel.query.filter(PostModel.owner_id == user_id);
   
   @staticmethod
   def get_all_thoughts():

@@ -35,6 +35,16 @@ def get_all():
   data = thought_schema.dump(posts, many=True).data
   return custom_response(data, 200)
 
+@thought_api.route('/me', methods=['GET'])
+def get_all_thoughts_user():
+  """
+  Get All thoughts
+  """
+  currentUser = g.user.get('id')
+  posts = PostModel.get_thought_user(currentUser)
+  data = thought_schema.dump(posts, many=True).data
+  return custom_response(data, 200)
+
 @thought_api.route('/marketFeedPost/<int:numPosts>/<int:lookbackHours>/<int:lookbackHoursEnd>', methods=['GET'])
 @Auth.auth_required
 def get_all_market_active(numPosts, lookbackHours, lookbackHoursEnd):
