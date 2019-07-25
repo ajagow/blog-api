@@ -36,6 +36,7 @@ def get_all():
   return custom_response(data, 200)
 
 @thought_api.route('/me', methods=['GET'])
+@Auth.auth_required
 def get_all_thoughts_user():
   """
   Get All thoughts
