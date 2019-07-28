@@ -2,13 +2,14 @@
 
 from flask import request, json, Response, Blueprint, g
 from ..models.LikesModel import LikesModel, LikesSchema
-from ..models.UserModel import UserModel, UserSchema
+from ..models.UserModel import UserModel, UserSchema, RankingSchema
 from ..models.PostModel import PostModel, PostSchema
 from ..shared.Authentication import Auth
 
 user_api = Blueprint('user_api', __name__)
 user_schema = UserSchema()
 post_schema = PostSchema()
+ranking_schema = RankingSchema()
 
 @user_api.route('/', methods=['POST'])
 def create():
@@ -109,6 +110,24 @@ def get_networth():
   d.update({"net_worth": user})
 
   return custom_response(d, 200)
+
+@user_api.route('/rankings', methods=['GET'])
+@Auth.auth_required
+def get_rankings():
+  """
+  Get rankings
+  """
+  users = UserModel.get_rankings(g.user.get('id'))
+  data = ranking_schema.dump(users, many=True).data
+
+  ranking = 1
+  for d in data:
+    d.update({"rank": ranking})
+    ranking += 1
+
+
+  
+  return custom_response(data, 200)
 
 @user_api.route('me/votes', methods=['GET'])
 @Auth.auth_required
