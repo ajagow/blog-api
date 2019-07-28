@@ -78,7 +78,7 @@ class UserModel(db.Model):
     user_ideas = user.thoughts
     user_investments = user.investments
 
-    worth = 0
+    worth = 100
     for thought in user_ideas:
       initial = thought.initial_worth
       earnings = get_earnings(thought.id, initial)
