@@ -60,6 +60,21 @@ def get_dislikes_for_post(thought_id):
 
     return custom_response(data, 200)
 
+@likes_api.route('votesForUser/<int:user_id>', methods=['GET'])
+@Auth.auth_required
+def get_votes_for_user(user_id):
+    """
+    Get all like/dislike history for an user
+    """
+    req_data = request.get_json()
+    votes = LikesModel.get_votes_for_user(user_id)
+    if not votes:
+        return custom_response({'error': 'no voting history'}, 404)
+
+    data = json.dumps(post)
+
+    return custom_response(data, 200)
+
 
 @likes_api.route('/<int:thought_id>', methods=['PUT'])
 @Auth.auth_required

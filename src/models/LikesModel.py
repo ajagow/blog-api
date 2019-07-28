@@ -47,6 +47,11 @@ class LikesModel(db.Model):
   def get_dislikes_for_post(id):
     return LikesModel.query.filter(and_(LikesModel.post_id == id, LikesModel.is_like == False)).count()
 
+  @staticmethod
+  def get_votes_for_user(id):
+    return LikesModel.query.filter(LikesModel.user_id == id)
+
+
   def __repr__(self):
     return '<id {}>'.format(self.id)
 
