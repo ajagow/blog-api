@@ -91,6 +91,12 @@ class UserModel(db.Model):
       investment_earnings = get_earnings(post_id, initial_investment)
       worth += investment_earnings
 
+    if worth <= 0:
+      return 10
+
+    user.net_worth = worth
+    db.session.commit()
+
     return worth
 
   @staticmethod
@@ -99,11 +105,12 @@ class UserModel(db.Model):
     for u in users:
       net_worth = UserModel.get_user_networth(u.id)
 
-      if net_worth < 0:
+      if net_worth <= 0:
         net_worth = 10
 
       # update each users networth
       u.net_worth = net_worth
+      db.session.commit()
 
     return UserModel.get_all_users_by_rank()
 
