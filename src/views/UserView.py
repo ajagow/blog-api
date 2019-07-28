@@ -3,10 +3,12 @@
 from flask import request, json, Response, Blueprint, g
 from ..models.LikesModel import LikesModel, LikesSchema
 from ..models.UserModel import UserModel, UserSchema
+from ..models.PostModel import PostModel, PostSchema
 from ..shared.Authentication import Auth
 
 user_api = Blueprint('user_api', __name__)
 user_schema = UserSchema()
+post_schema = PostSchema()
 
 @user_api.route('/', methods=['POST'])
 def create():
@@ -115,11 +117,27 @@ def get_voting_history():
     Retrieve the voting history of this user
     """
     user_id = g.user.get('id')
-    history = LikesModel.get_votes_for_user(user_id)
-    if not history:
+
+    likes = PostModel.get_likes_for_user(user_id, 10)
+    dislikes = PostModel.get_dislikes_for_user(user_id, 10)
+
+    if not likes and dislikes:
         return custom_response({'error': 'no voting history'}, 404)
 
-    data = json.dumps(history)
+    like_data = post_schema.dump(likes, many=True).data
+    dislike_data = post_schema.dump(dislikes, many=True).data
+
+    for like in like_data:
+      like.update({"is_like": True})
+
+
+    for dislike in dislike_data:
+      dislike.update({"is_like": False})
+
+
+    data = like_data + dislike_data
+
+
 
     return custom_response(data, 200)
 

@@ -82,6 +82,18 @@ class PostModel(db.Model):
       .filter(not_(exists().where(and_(LikesModel.post_id == PostModel.id, LikesModel.user_id == currentUser)))).order_by(asc(PostModel.created_at)).limit(numPosts)
 
   @staticmethod
+  def get_likes_for_user(currentUser, numPosts):
+
+    return PostModel.query.filter(exists().where(and_(LikesModel.post_id == PostModel.id, LikesModel.user_id == currentUser, LikesModel.is_like == True))).order_by(asc(PostModel.created_at))\
+      .limit(numPosts).all()
+
+  @staticmethod
+  def get_dislikes_for_user(currentUser, numPosts):
+
+    return PostModel.query.filter(exists().where(and_(LikesModel.post_id == PostModel.id, LikesModel.user_id == currentUser, LikesModel.is_like == False))).order_by(asc(PostModel.created_at))\
+      .limit(numPosts).all()
+
+  @staticmethod
   def get_one_thought(id):
     return PostModel.query.get(id)
 
