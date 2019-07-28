@@ -1,6 +1,7 @@
 #/src/views/UserView
 
 from flask import request, json, Response, Blueprint, g
+from ..models.LikesModel import LikesModel, LikesSchema
 from ..models.UserModel import UserModel, UserSchema
 from ..shared.Authentication import Auth
 
@@ -107,6 +108,20 @@ def get_networth():
 
   return custom_response(d, 200)
 
+@user_api.route('me/votes', methods=['GET'])
+@Auth.auth_required
+def get_voting_history():
+    """
+    Retrieve the voting history of this user
+    """
+    user_id = UserModel.get_one_user(g.user.get('id'))
+    history = LikesModel.get_votes_for_user(user_id)
+    if not history:
+        return custom_response({'error': 'no voting history'}, 404)
+
+    data = json.dumps(post)
+
+    return custom_response(data, 200)
 
 @user_api.route('/login', methods=['POST'])
 def login():
