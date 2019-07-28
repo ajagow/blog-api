@@ -2,6 +2,7 @@
 from flask import request, g, Blueprint, json, Response
 from ..shared.Authentication import Auth
 from ..models.LikesModel import LikesModel, LikesSchema
+from ..models.PostModel import PostModel, PostsSchema
 
 likes_api = Blueprint('likes_api', __name__)
 likes_schema = LikesSchema()
@@ -66,12 +67,17 @@ def get_votes_for_user(user_id):
     """
     Get all like/dislike history for an user
     """
-    req_data = request.get_json()
     votes = LikesModel.get_votes_for_user(user_id)
     if not votes:
         return custom_response({'error': 'no voting history'}, 404)
 
-    data = json.dumps(post)
+    # for each like/dislike, add thought content
+    for vote in votes:
+        post_id = vote["post_id"]
+        post_content = PostModel.get_one_thought(post_id)["content"]
+        vote["content"] = post_content
+
+    data = json.dumps(votes)
 
     return custom_response(data, 200)
 
