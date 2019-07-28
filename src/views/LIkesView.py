@@ -2,7 +2,7 @@
 from flask import request, g, Blueprint, json, Response
 from ..shared.Authentication import Auth
 from ..models.LikesModel import LikesModel, LikesSchema
-from ..models.PostModel import PostModel, PostsSchema
+from ..models.PostModel import PostModel, PostSchema
 
 likes_api = Blueprint('likes_api', __name__)
 likes_schema = LikesSchema()

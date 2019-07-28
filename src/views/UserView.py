@@ -114,12 +114,12 @@ def get_voting_history():
     """
     Retrieve the voting history of this user
     """
-    user_id = UserModel.get_one_user(g.user.get('id'))
+    user_id = g.user.get('id')
     history = LikesModel.get_votes_for_user(user_id)
     if not history:
         return custom_response({'error': 'no voting history'}, 404)
 
-    data = json.dumps(post)
+    data = json.dumps(history)
 
     return custom_response(data, 200)
 

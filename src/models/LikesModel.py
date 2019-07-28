@@ -49,7 +49,7 @@ class LikesModel(db.Model):
 
   @staticmethod
   def get_votes_for_user(id):
-    return LikesModel.query.filter(LikesModel.user_id == id)
+    return LikesModel.query.filter(LikesModel.user_id == id).all()
 
 
   def __repr__(self):
