@@ -141,5 +141,5 @@ class UserSchema(Schema):
   modified_at = fields.DateTime(dump_only=True)
   thoughts = fields.Nested(PostSchema, many=True)
   investments = fields.Nested(InvestorsSchema, many=True)
-  net_worth = fields.Int(required=True)
+  net_worth = fields.Int(required=False)
 
