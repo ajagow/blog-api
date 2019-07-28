@@ -5,6 +5,7 @@ from src.shared.Util import get_total_value
 from ..shared.Authentication import Auth
 from ..models.PostModel import PostModel, PostSchema
 from ..models.InvestmentsModel import InvestmentsModel
+from ..models.UserModel import UserModel
 
 thought_api = Blueprint('thought_api', __name__)
 thought_schema = PostSchema()
@@ -18,6 +19,14 @@ def create():
   """
   req_data = request.get_json()
   req_data['owner_id'] = g.user.get('id')
+
+
+  initial_investment = req_data['initial_worth']
+  networth = UserModel.get_user_networth(g.user.get('id'))
+
+  if initial_investment < 0 or initial_investment > networth:
+      return custom_response("Invalid investment amount" , 400)
+
   data, error = thought_schema.load(req_data)
   if error:
     return custom_response(error, 400)
@@ -44,6 +53,13 @@ def get_all_thoughts_user():
   currentUser = g.user.get('id')
   posts = PostModel.get_thought_user(currentUser)
   data = thought_schema.dump(posts, many=True).data
+
+  for d in data:
+      post_id = d.get('id')
+      total_worth = get_total_value(post_id)
+      num_investors = InvestmentsModel.get_number_of_investors_for_post(post_id)
+      d.update({"total_worth": total_worth, "num_investors" : num_investors})
+
   return custom_response(data, 200)
 
 @thought_api.route('/marketFeedPost/<int:numPosts>/<int:lookbackHours>/<int:lookbackHoursEnd>', methods=['GET'])

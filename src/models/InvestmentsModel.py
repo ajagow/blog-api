@@ -49,8 +49,8 @@ class InvestmentsModel(db.Model):
     number_of_investors = InvestmentsModel.query.filter(InvestmentsModel.post_id == id).count()
 
     if number_of_investors is None:
-      return 0
-    return number_of_investors
+      return 1
+    return number_of_investors + 1
 
   @staticmethod
   def get_all_investors_investments(id):

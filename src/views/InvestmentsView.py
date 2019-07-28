@@ -2,6 +2,7 @@
 from flask import request, g, Blueprint, json, Response
 from ..shared.Authentication import Auth
 from ..models.InvestmentsModel import InvestmentsModel, InvestorsSchema
+from ..models.UserModel import UserModel
 
 investments_api = Blueprint('investments_api', __name__)
 investments_schema = InvestorsSchema()
@@ -15,6 +16,13 @@ def create():
   """
   req_data = request.get_json()
   req_data['investor_id'] = g.user.get('id')
+
+  initial_investment = req_data['initial_investment']
+  networth = UserModel.get_user_networth(g.user.get('id'))
+
+  if initial_investment < 0 or initial_investment > networth:
+      return custom_response("Invalid investment amount" , 400)
+
   data, error = investments_schema.load(req_data)
   if error:
     return custom_response(error, 400)
