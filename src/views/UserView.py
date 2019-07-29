@@ -126,7 +126,7 @@ def get_rankings():
     ranking += 1
 
 
-  
+
   return custom_response(data, 200)
 
 @user_api.route('me/votes', methods=['GET'])
@@ -140,7 +140,7 @@ def get_voting_history():
     likes = PostModel.get_likes_for_user(user_id, 10)
     dislikes = PostModel.get_dislikes_for_user(user_id, 10)
 
-    if not likes and dislikes:
+    if not likes and not dislikes:
         return custom_response({'error': 'no voting history'}, 404)
 
     like_data = post_schema.dump(likes, many=True).data
@@ -148,10 +148,15 @@ def get_voting_history():
 
     for like in like_data:
       like.update({"is_like": True})
+      count = add_count(like)
+      like.update(count)
+
 
 
     for dislike in dislike_data:
       dislike.update({"is_like": False})
+      count = add_count(dislike)
+      dislike.update(count)
 
 
     data = like_data + dislike_data
@@ -192,3 +197,12 @@ def custom_response(res, status_code):
     response=json.dumps(res),
     status=status_code
   )
+
+def add_count(data):
+  post_id = data.get("id")
+  num_dislikes = LikesModel.get_dislikes_for_post(post_id)
+  num_likes = LikesModel.get_likes_for_post(post_id)
+
+  return {"num_likes": num_likes, "num_dislikes": num_dislikes}
+
+
