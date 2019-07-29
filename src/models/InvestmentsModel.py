@@ -1,9 +1,10 @@
 # src/models/InvestorsModel.py
-from sqlalchemy import func
+from sqlalchemy import func, and_
 
 from . import db
 import datetime
 from marshmallow import fields, Schema
+
 
 class InvestmentsModel(db.Model):
   """
@@ -60,6 +61,10 @@ class InvestmentsModel(db.Model):
   def get_investment_total_for_post(id):
     return InvestmentsModel.query.with_entities(func.sum(InvestmentsModel.initial_investment))\
       .filter(InvestmentsModel.post_id == id).scalar()
+
+  @staticmethod
+  def get_my_initial_investment_for_post(investor_id, post_id):
+    return InvestmentsModel.query.with_entities(func.sum(InvestmentsModel.initial_investment)).filter(and_(InvestmentsModel.investor_id == investor_id, InvestmentsModel.post_id == post_id)).scalar()
 
   def __repr__(self):
     return '<id {}>'.format(self.id)

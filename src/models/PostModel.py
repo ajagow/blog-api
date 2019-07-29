@@ -94,6 +94,12 @@ class PostModel(db.Model):
       .limit(numPosts).all()
 
   @staticmethod
+  def get_investment_posts_for_user(currentUser, numPosts):
+
+    return PostModel.query.filter(exists().where(and_(InvestmentsModel.post_id == PostModel.id, InvestmentsModel.investor_id == currentUser))).order_by(asc(PostModel.created_at))\
+      .limit(numPosts).all()
+
+  @staticmethod
   def get_one_thought(id):
     return PostModel.query.get(id)
 
