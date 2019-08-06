@@ -1,12 +1,13 @@
 #/src/views/PostView.py
 from flask import request, g, Blueprint, json, Response
 
-from src.models import LikesModel
 from src.shared.Util import get_total_value, get_earnings
 from ..shared.Authentication import Auth
 from ..models.PostModel import PostModel, PostSchema
 from ..models.InvestmentsModel import InvestmentsModel
 from ..models.UserModel import UserModel
+from ..models.LikesModel import LikesModel
+
 
 thought_api = Blueprint('thought_api', __name__)
 thought_schema = PostSchema()
@@ -58,7 +59,8 @@ def get_all_thoughts_user():
   for d in data:
       post_id = d.get('id')
 
-      initial_investment = InvestmentsModel.get_my_initial_investment_for_post(g.user.get('id'), post_id)
+      initial_investment = PostModel.get_one_thought(post_id).initial_worth
+
       earnings = get_earnings(post_id, initial_investment)
       total_worth = get_total_value(post_id)
       num_investors = InvestmentsModel.get_number_of_investors_for_post(post_id)
