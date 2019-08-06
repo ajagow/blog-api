@@ -32,6 +32,12 @@ def is_post_done(post):
 
     return post.created_at < look_back_start
 
+def is_post_done_hours(post, hours):
+    look_back_time_start = datetime.timedelta(hours=hours)
+    look_back_start = datetime.datetime.now() - look_back_time_start
+
+    return post.created_at < look_back_start
+
 
 
 def get_earnings(post_id, initial_investment):

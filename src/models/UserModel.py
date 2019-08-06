@@ -7,7 +7,7 @@ from sqlalchemy import desc
 from . import db, bcrypt
 from .PostModel import PostSchema, PostModel
 from .InvestmentsModel import InvestorsSchema, InvestmentsModel
-from ..shared.Util import get_earnings
+from ..shared.Util import get_earnings, is_post_done_hours
 
 class UserModel(db.Model):
   """
@@ -82,14 +82,17 @@ class UserModel(db.Model):
     for thought in user_ideas:
       initial = thought.initial_worth
       earnings = get_earnings(thought.id, initial)
-      worth += earnings
+      if is_post_done_hours(thought, 48):
+        worth += earnings
 
     for investment in user_investments:
       post_id = investment.post_id
       initial_investment = investment.initial_investment
 
       investment_earnings = get_earnings(post_id, initial_investment)
-      worth += investment_earnings
+
+      if is_post_done_hours(investment, 48):
+        worth += investment_earnings
 
     if worth <= 0:
       return 10
