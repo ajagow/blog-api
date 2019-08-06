@@ -89,9 +89,11 @@ class UserModel(db.Model):
       post_id = investment.post_id
       initial_investment = investment.initial_investment
 
+      post = PostModel.get_one_thought(investment.post_id)
+
       investment_earnings = get_earnings(post_id, initial_investment)
 
-      if is_post_done_hours(investment, 48):
+      if is_post_done_hours(post, 48):
         worth += investment_earnings
 
     if worth <= 0:
