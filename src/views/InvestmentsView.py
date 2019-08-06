@@ -3,6 +3,7 @@ from flask import request, g, Blueprint, json, Response
 from ..shared.Authentication import Auth
 from ..models.InvestmentsModel import InvestmentsModel, InvestorsSchema
 from ..models.UserModel import UserModel
+from ..models.LikesModel import LikesModel
 from ..models.PostModel import PostSchema, PostModel
 from ..shared.Util import get_earnings, get_total_value
 
@@ -119,8 +120,11 @@ def get_my_investments():
         earnings = get_earnings(post_id, initial_investment)
         total_worth = get_total_value(post_id)
         num_investors = InvestmentsModel.get_number_of_investors_for_post(post_id)
+        num_likes = LikesModel.get_likes_for_post(post_id)
+        num_dislikes = LikesModel.get_dislikes_for_post(post_id)
         d.update({"total_worth": total_worth, "num_investors": num_investors})
         d.update({"earnings": earnings, "my_initial_investment": initial_investment})
+        d.update({"num_likes": num_likes, "num_dislikes": num_dislikes})
 
     return custom_response(data, 200)
 
