@@ -51,7 +51,7 @@ def get_earnings(post_id, initial_investment):
     if is_post_done(post):
 
         if (likes == 0 and dislikes == 0):
-            return initial_investment
+            return 0
 
         worth = floor(initial_investment * (1 + ((likes - dislikes) / (likes + dislikes))))
 
