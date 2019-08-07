@@ -27,7 +27,7 @@ def get_total_value(post_id):
 
 
 def is_post_done(post):
-    look_back_time_start = datetime.timedelta(hours=24)
+    look_back_time_start = datetime.timedelta(hours=48)
     look_back_start = datetime.datetime.now() - look_back_time_start
 
     return post.created_at < look_back_start
