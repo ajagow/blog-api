@@ -82,8 +82,7 @@ class UserModel(db.Model):
     for thought in user_ideas:
       initial = thought.initial_worth
       earnings = get_earnings(thought.id, initial)
-      if is_post_done_hours(thought, 48):
-        worth += earnings
+      worth += earnings
 
     for investment in user_investments:
       post_id = investment.post_id
@@ -93,8 +92,7 @@ class UserModel(db.Model):
 
       investment_earnings = get_earnings(post_id, initial_investment)
 
-      if is_post_done_hours(post, 48):
-        worth += investment_earnings
+      worth += investment_earnings
 
     if worth <= 0:
       return 10
