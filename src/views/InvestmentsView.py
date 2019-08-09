@@ -56,52 +56,6 @@ def get_investment_total_for_post(post_id):
   return custom_response(data, 200)
 
 
-@investments_api.route('post/<int:thought_id>', methods=['GET'])
-@Auth.auth_required
-def get_investors_for_post(thought_id):
-    """
-    Get investors for a post
-    delete me
-    """
-    post = InvestmentsModel.get_all_investors_for_post(thought_id)
-    if not post:
-        return custom_response({'error': 'post not found'}, 404)
-
-    data = investments_schema.dump(post, many=True).data
-
-    return custom_response(data, 200)
-
-@investments_api.route('investor/<int:investor_id>', methods=['GET'])
-@Auth.auth_required
-def get_users_investments(investor_id):
-    """
-    Get investors for a post
-    """
-    post = InvestmentsModel.get_all_investors_investments(investor_id)
-    if not post:
-        return custom_response({'error': 'user not found'}, 404)
-
-    data = investments_schema.dump(post, many=True).data
-
-    return custom_response(data, 200)
-
-@investments_api.route('me/<int:post_id>', methods=['GET'])
-@Auth.auth_required
-def get_my_investments_for_post(post_id):
-    """
-    Get investors for a post
-    """
-    post = InvestmentsModel.get_my_initial_investment_for_post(g.user.get('id'), post_id)
-    if not post:
-        return custom_response({'error': 'user not found'}, 404)
-
-    # data = investments_schema.dump(post, many=True).data
-
-    data = {"user_total_investment": post}
-
-
-    return custom_response(data, 200)
-
 @investments_api.route('me', methods=['GET'])
 @Auth.auth_required
 def get_my_investments():

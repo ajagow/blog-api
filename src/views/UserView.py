@@ -44,18 +44,6 @@ def get_all():
   ser_users = user_schema.dump(users, many=True).data
   return custom_response(ser_users, 200)
 
-@user_api.route('/<int:user_id>', methods=['GET'])
-@Auth.auth_required
-def get_a_user(user_id):
-  """
-  Get a single user
-  """
-  user = UserModel.get_one_user(user_id)
-  if not user:
-    return custom_response({'error': 'user not found'}, 404)
-
-  ser_user = user_schema.dump(user).data
-  return custom_response(ser_user, 200)
 
 @user_api.route('/me', methods=['PUT'])
 @Auth.auth_required
@@ -97,19 +85,6 @@ def get_me():
   ser_user.update({"net_worth": net_worth})
   return custom_response(ser_user, 200)
 
-@user_api.route('/worth', methods=['GET'])
-@Auth.auth_required
-def get_networth():
-  """
-  Get me
-  """
-  user = UserModel.get_user_networth(g.user.get('id'))
-
-  d = {}
-
-  d.update({"net_worth": user})
-
-  return custom_response(d, 200)
 
 @user_api.route('/rankings', methods=['GET'])
 @Auth.auth_required

@@ -9,6 +9,8 @@ from marshmallow import fields, Schema
 class InvestmentsModel(db.Model):
   """
   Investment Model
+  Keeps track of an Investment a user makes with id, initial investment amount, id of the post they're investing in,
+  and id of the user
   """
 
   __tablename__ = 'investments'

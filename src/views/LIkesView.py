@@ -2,7 +2,7 @@
 from flask import request, g, Blueprint, json, Response
 from ..shared.Authentication import Auth
 from ..models.LikesModel import LikesModel, LikesSchema
-from ..models.PostModel import PostModel, PostSchema
+from ..models.PostModel import PostModel
 
 likes_api = Blueprint('likes_api', __name__)
 likes_schema = LikesSchema()
@@ -31,35 +31,6 @@ def get_all():
   posts = LikesModel.get_all_likes()
   data = likes_schema.dump(posts, many=True).data
   return custom_response(data, 200)
-
-@likes_api.route('likesForPost/<int:thought_id>', methods=['GET'])
-def get_likes_for_post(thought_id):
-    """
-    Get likes for a post
-    """
-    req_data = request.get_json()
-    post = LikesModel.get_likes_for_post(thought_id)
-    if not post:
-        return custom_response({'error': 'post not found'}, 404)
-
-    data = json.dumps(post)
-
-    return custom_response(data, 200)
-
-@likes_api.route('dislikesForPost/<int:thought_id>', methods=['GET'])
-@Auth.auth_required
-def get_dislikes_for_post(thought_id):
-    """
-    Get likes for a post
-    """
-    req_data = request.get_json()
-    post = LikesModel.get_dislikes_for_post(thought_id)
-    if not post:
-        return custom_response({'error': 'post not found'}, 404)
-
-    data = json.dumps(post)
-
-    return custom_response(data, 200)
 
 @likes_api.route('votesForUser/<int:user_id>', methods=['GET'])
 @Auth.auth_required

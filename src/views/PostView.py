@@ -83,14 +83,6 @@ def get_all_market_active(numPosts, lookbackHours, lookbackHoursEnd):
   data = thought_schema.dump(posts, many=True).data
   return custom_response(data, 200)
 
-@thought_api.route('/value/<int:post_id>', methods=['GET'])
-def get_value_of_post(post_id):
-  """
-  Get All thoughts
-  """
-  posts = PostModel.get_value_of_post(post_id)
-  data = posts
-  return custom_response(data, 200)
 
 @thought_api.route('/investments/<int:numPosts>/<int:lookbackHours>', methods=['GET'])
 @Auth.auth_required
