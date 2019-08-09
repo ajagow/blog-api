@@ -37,15 +37,6 @@ def create():
   data = thought_schema.dump(post).data
   return custom_response(data, 201)
 
-@thought_api.route('/', methods=['GET'])
-def get_all():
-  """
-  Get All thoughts
-  """
-  posts = PostModel.get_all_thoughts()
-  data = thought_schema.dump(posts, many=True).data
-  return custom_response(data, 200)
-
 @thought_api.route('/me', methods=['GET'])
 @Auth.auth_required
 def get_all_thoughts_user():
@@ -76,7 +67,7 @@ def get_all_thoughts_user():
 @Auth.auth_required
 def get_all_market_active(numPosts, lookbackHours, lookbackHoursEnd):
   """
-  Get All thoughts
+  Get All market active thoughts a user can view
   """
   currentUser = g.user.get('id')
   posts = PostModel.get_market_active_posts_for_user(currentUser, numPosts, lookbackHours, lookbackHoursEnd)

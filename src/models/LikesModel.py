@@ -37,18 +37,37 @@ class LikesModel(db.Model):
   
   @staticmethod
   def get_all_likes():
+    """
+    Get all likes in the database.
+    :return: all likes
+    """
     return LikesModel.query.all()
 
   @staticmethod
   def get_likes_for_post(id):
+    """
+    Get how many likes there are for a post
+    :param id: id of post to get likes for
+    :return: total number of likes a post has
+    """
     return LikesModel.query.filter(and_(LikesModel.post_id == id, LikesModel.is_like == True)).count()
 
   @staticmethod
   def get_dislikes_for_post(id):
+    """
+    Get how many dislikes there are for a post
+    :param id: id of post to get dislikes for
+    :return: total number of dislikes a post has
+    """
     return LikesModel.query.filter(and_(LikesModel.post_id == id, LikesModel.is_like == False)).count()
 
   @staticmethod
   def get_votes_for_user(id):
+    """
+    Get votes a user made.
+    :param id: user id
+    :return: all likes and dislikes of a user
+    """
     return LikesModel.query.filter(LikesModel.user_id == id).all()
 
 

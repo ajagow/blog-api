@@ -75,7 +75,7 @@ def delete():
 @Auth.auth_required
 def get_me():
   """
-  Get me
+  Get information about me
   """
   user = UserModel.get_one_user(g.user.get('id'))
   ser_user = user_schema.dump(user).data

@@ -7,7 +7,7 @@ from sqlalchemy import desc
 from . import db, bcrypt
 from .PostModel import PostSchema, PostModel
 from .InvestmentsModel import InvestorsSchema, InvestmentsModel
-from ..shared.Util import get_earnings, is_post_done_hours
+from ..shared.Util import get_earnings
 
 class UserModel(db.Model):
   """
@@ -57,22 +57,45 @@ class UserModel(db.Model):
 
   @staticmethod
   def get_all_users():
+    """
+    Get all users from database.
+    :return: all users
+    """
     return UserModel.query.all()
 
   @staticmethod
   def get_all_users_by_rank():
+    """
+    Rank all users in the db
+    :return: rank of each user
+    """
     return UserModel.query.order_by(desc(UserModel.net_worth)).all()
 
   @staticmethod
   def get_one_user(id):
+    """
+    Get requested user from database.
+    :param id: requested user id
+    :return: get user
+    """
     return UserModel.query.get(id)
   
   @staticmethod
   def get_user_by_email(value):
+    """
+    Get user by email.
+    :param value: given email
+    :return: user associated with that email
+    """
     return UserModel.query.filter_by(email=value).first()
 
   @staticmethod
   def get_user_networth(id):
+    """
+    Get networth of given user
+    :param id: id of user.
+    :return: net worth of user
+    """
     user = UserModel.query.get(id)
 
     user_ideas = user.thoughts
@@ -88,8 +111,6 @@ class UserModel(db.Model):
       post_id = investment.post_id
       initial_investment = investment.initial_investment
 
-      post = PostModel.get_one_thought(investment.post_id)
-
       investment_earnings = get_earnings(post_id, initial_investment)
 
       worth += investment_earnings
@@ -104,6 +125,11 @@ class UserModel(db.Model):
 
   @staticmethod
   def get_rankings(id):
+    """
+    UPdate rankings of all users.
+    :param id: id of user who is requesting the rankings
+    :return: rank of all users
+    """
     users = UserModel.get_all_users()
     for u in users:
       net_worth = UserModel.get_user_networth(u.id)

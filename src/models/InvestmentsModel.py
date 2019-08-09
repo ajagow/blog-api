@@ -41,14 +41,20 @@ class InvestmentsModel(db.Model):
 
   @staticmethod
   def get_all_investments():
+    """
+    Get all investments
+    :return: Investment Model list
+    """
+
     return InvestmentsModel.query.all()
 
   @staticmethod
-  def get_all_investors_for_post(id):
-    return InvestmentsModel.query.filter(InvestmentsModel.post_id == id).all()
-
-  @staticmethod
   def get_number_of_investors_for_post(id):
+    """
+    Get number of investors for a post.
+    :param id: post id
+    :return: number of investors for the post
+    """
     number_of_investors = InvestmentsModel.query.filter(InvestmentsModel.post_id == id).count()
 
     if number_of_investors is None:
@@ -56,16 +62,23 @@ class InvestmentsModel(db.Model):
     return number_of_investors + 1
 
   @staticmethod
-  def get_all_investors_investments(id):
-    return InvestmentsModel.query.filter(InvestmentsModel.investor_id == id)
-
-  @staticmethod
   def get_investment_total_for_post(id):
+    """
+    Get total amount all investors have invested in given post.
+    :param id: given post
+    :return: investment total for post
+    """
     return InvestmentsModel.query.with_entities(func.sum(InvestmentsModel.initial_investment))\
       .filter(InvestmentsModel.post_id == id).scalar()
 
   @staticmethod
   def get_my_initial_investment_for_post(investor_id, post_id):
+    """
+    Get how much a user invested in a post
+    :param investor_id: user id
+    :param post_id: post id
+    :return: a user's initial invesment amount for given post
+    """
     return InvestmentsModel.query.with_entities(func.sum(InvestmentsModel.initial_investment)).filter(and_(InvestmentsModel.investor_id == investor_id, InvestmentsModel.post_id == post_id)).scalar()
 
   def __repr__(self):
