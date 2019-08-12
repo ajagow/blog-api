@@ -96,7 +96,7 @@ class PostModel(db.Model):
     look_back_time = datetime.timedelta(hours=lookbackHours)
     look_back = now() - look_back_time
     return PostModel.query.filter(and_(PostModel.created_at > look_back, PostModel.owner_id != currentUser))\
-      .filter(not_(exists().where(and_(InvestmentsModel.post_id == PostModel.id, InvestmentsModel.investor_id == currentUser)))).order_by(asc(PostModel.created_at)).limit(numPosts)
+      .filter(not_(exists().where(and_(InvestmentsModel.post_id == PostModel.id, InvestmentsModel.investor_id == currentUser)))).order_by(asc(PostModel.created_at)).limit(100)
 
   @staticmethod
   def get_likes_for_user(currentUser, numPosts):
