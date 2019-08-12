@@ -67,7 +67,7 @@ def get_all_thoughts_user():
 @Auth.auth_required
 def get_all_market_active(numPosts, lookbackHours, lookbackHoursEnd):
   """
-  Get All market active thoughts a user can view
+  Get All market active thoughts a user can viewl
   """
   currentUser = g.user.get('id')
   posts = PostModel.get_market_active_posts_for_user(currentUser, numPosts, lookbackHours, lookbackHoursEnd)

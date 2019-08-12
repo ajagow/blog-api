@@ -62,7 +62,7 @@ def get_my_investments():
     """
     Get investors for a post
     """
-    post = PostModel.get_investment_posts_for_user(g.user.get('id'), 10)
+    post = PostModel.get_investment_posts_for_user(g.user.get('id'), 100)
     if not post:
         return custom_response({'error': 'user not found'}, 404)
 

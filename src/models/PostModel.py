@@ -82,7 +82,7 @@ class PostModel(db.Model):
 
     return PostModel.query.filter(and_(PostModel.created_at < look_back_start, PostModel.created_at > look_back_end, PostModel.owner_id != currentUser))\
     .filter(not_(exists().where(and_(LikesModel.post_id == PostModel.id, LikesModel.user_id == currentUser)))).order_by(asc(PostModel.created_at)).limit(
-    numPosts)
+    100)
 
   @staticmethod
   def get_investment_posts(currentUser, numPosts, lookbackHours):

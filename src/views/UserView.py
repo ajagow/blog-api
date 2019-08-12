@@ -112,8 +112,8 @@ def get_voting_history():
     """
     user_id = g.user.get('id')
 
-    likes = PostModel.get_likes_for_user(user_id, 10)
-    dislikes = PostModel.get_dislikes_for_user(user_id, 10)
+    likes = PostModel.get_likes_for_user(user_id, 50)
+    dislikes = PostModel.get_dislikes_for_user(user_id, 50)
 
     if not likes and not dislikes:
         return custom_response({'error': 'no voting history'}, 404)
@@ -174,6 +174,11 @@ def custom_response(res, status_code):
   )
 
 def add_count(data):
+  """
+  Add count of num likes and num dislikes in dictionary form
+  :param data: post data
+  :return: dictionary with num_likes and num_dislikes
+  """
   post_id = data.get("id")
   num_dislikes = LikesModel.get_dislikes_for_post(post_id)
   num_likes = LikesModel.get_likes_for_post(post_id)
