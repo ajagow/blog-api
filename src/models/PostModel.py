@@ -131,7 +131,7 @@ class PostModel(db.Model):
     :return:
     """
     return PostModel.query.filter(exists().where(and_(InvestmentsModel.post_id == PostModel.id, InvestmentsModel.investor_id == currentUser))).order_by(desc(PostModel.created_at))\
-      .limit(numPosts).all()
+      .limit(100).all()
 
   @staticmethod
   def get_one_thought(id):
